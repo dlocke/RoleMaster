@@ -3,6 +3,8 @@ from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
 from flask.ext.appbuilder import ModelView
 from app import appbuilder, db
 
+from .models import Organization, Role
+
 """
     Create your Views::
 
@@ -24,6 +26,19 @@ from app import appbuilder, db
 def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
+class OrganizationModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(Organization)
+    #related_views = []
+    #label_columns = {}
+    #show_fieldsets = []
+
+class RoleModelView(ModelView):
+    datamodel = SQLAInterface(Role)
+
 db.create_all()
+
+appbuilder.add_view(OrganizationModelView, "List Organizations")
+#appbuilder.add_view(RoleModelView, "List Roles")
 
 
