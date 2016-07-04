@@ -21,6 +21,14 @@ class Organization(Model):
     def __repr__(self):
         return self.name
 
+class OrganizationMembership(Model):
+    """TODO: Document me"""
+    id = Column(Integer, primary_key=True)
+    organization_id = Column(Integer, ForeignKey('organization.id'))
+    organization = relationship("Organization")
+    user_id = Column(Integer, ForeignKey('ab_user.id'))
+    user = relationship(User)
+
 class RolemasterRole(Model):
     """TODO: Document me"""
     id = Column(Integer, primary_key=True)

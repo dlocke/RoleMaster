@@ -3,7 +3,7 @@ from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
 from flask.ext.appbuilder import ModelView
 from app import appbuilder, db
 
-from .models import Organization, RolemasterRole, Accountability, Domain, RoleFilling
+from .models import Organization, OrganizationMembership, RolemasterRole, Accountability, Domain, RoleFilling
 
 """
     Create your Views::
@@ -36,6 +36,12 @@ class RM_OrganizationModelView(ModelView):
     #label_columns = {}
     #show_fieldsets = []
 
+class RM_OrganizationMembershipModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(OrganizationMembership)
+
+    list_columns = ['organization', 'user']
+
 class RM_RoleModelView(ModelView):
     """TODO: Document me"""
     datamodel = SQLAInterface(RolemasterRole)
@@ -58,11 +64,12 @@ class RM_RoleFillingModelView(ModelView):
     """TODO: Document me"""
     datamodel = SQLAInterface(RoleFilling)
 
-    list_columns = ['role_id', 'user_id']
+    list_columns = ['role', 'user']
 
 db.create_all()
 
 appbuilder.add_view(RM_OrganizationModelView, "List Organizations")
+appbuilder.add_view(RM_OrganizationMembershipModelView, "List Organization Members")
 appbuilder.add_view(RM_RoleModelView, "List Roles")
 appbuilder.add_view(RM_AccountabilityModelView, "List Accountabilities")
 appbuilder.add_view(RM_DomainModelView, "List Domains")
