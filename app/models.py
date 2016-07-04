@@ -1,6 +1,7 @@
 from flask.ext.appbuilder import Model
 #from flask.ext.appbuilder.models.mixins import AuditMixin, FileColumn, ImageColumn
-from sqlalchemy import Column, Integer, String, ForeignKey
+from flask_appbuilder.security.sqla.models import User
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 """
 
@@ -15,23 +16,39 @@ class Organization(Model):
     """TODO: Document me"""
     id = Column(Integer, primary_key = True)
     name = Column(String(50), unique = True, nullable = False)
-    #description = Column(String(250), unique = False, nullable = False)
+    description = Column(Text, unique = False, nullable = False)
 
-class Role(Model):
+    def __repr__(self):
+        return self.name
+
+class RolemasterRole(Model):
     """TODO: Document me"""
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique = True, nullable = False)
     organization_id = Column(Integer, ForeignKey('organization.id'))
     organization = relationship("Organization")
 
+    def __repr__(self):
+        return self.name
+
 class Accountability(Model):
     """TODO: Document me"""
     id = Column(Integer, primary_key=True)
     description = Column(String(250), unique = False, nullable = False)
-    role_id = Column(Integer, ForeignKey('role.id'))
+    role_id = Column(Integer, ForeignKey('rolemaster_role.id'))
+    role = relationship("RolemasterRole")
 
 class Domain(Model):
     """TODO: Document me"""
     id = Column(Integer, primary_key=True)
     description = Column(String(250), unique = False, nullable = False)
-    role_id = Column(Integer, ForeignKey('role.id'))
+    role_id = Column(Integer, ForeignKey('rolemaster_role.id'))
+    role = relationship("RolemasterRole")
+
+class RoleFilling(Model):
+    """TODO: Document me"""
+    id = Column(Integer, primary_key=True)
+    role_id = Column(Integer, ForeignKey('rolemaster_role.id'))
+    role = relationship("RolemasterRole")
+    user_id = Column(Integer, ForeignKey('ab_user.id'))
+    user = relationship(User)

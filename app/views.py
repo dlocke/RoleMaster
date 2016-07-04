@@ -3,7 +3,7 @@ from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
 from flask.ext.appbuilder import ModelView
 from app import appbuilder, db
 
-from .models import Organization, Role
+from .models import Organization, RolemasterRole, Accountability, Domain, RoleFilling
 
 """
     Create your Views::
@@ -26,19 +26,46 @@ from .models import Organization, Role
 def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
-class OrganizationModelView(ModelView):
+class RM_OrganizationModelView(ModelView):
     """TODO: Document me"""
     datamodel = SQLAInterface(Organization)
+
+    list_columns = ['name', 'description']
+
     #related_views = []
     #label_columns = {}
     #show_fieldsets = []
 
-class RoleModelView(ModelView):
-    datamodel = SQLAInterface(Role)
+class RM_RoleModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(RolemasterRole)
+
+    list_columns = ['name', 'organization']
+
+class RM_AccountabilityModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(Accountability)
+
+    list_columns = ['role', 'description']
+
+class RM_DomainModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(Domain)
+
+    list_columns = ['role', 'description']
+
+class RM_RoleFillingModelView(ModelView):
+    """TODO: Document me"""
+    datamodel = SQLAInterface(RoleFilling)
+
+    list_columns = ['role_id', 'user_id']
 
 db.create_all()
 
-appbuilder.add_view(OrganizationModelView, "List Organizations")
-#appbuilder.add_view(RoleModelView, "List Roles")
+appbuilder.add_view(RM_OrganizationModelView, "List Organizations")
+appbuilder.add_view(RM_RoleModelView, "List Roles")
+appbuilder.add_view(RM_AccountabilityModelView, "List Accountabilities")
+appbuilder.add_view(RM_DomainModelView, "List Domains")
+appbuilder.add_view(RM_RoleFillingModelView, "List Roles Filled")
 
 
